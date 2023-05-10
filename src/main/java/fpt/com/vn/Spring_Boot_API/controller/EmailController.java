@@ -51,8 +51,8 @@ public class EmailController {
     @PostMapping("/send_email")
     public ResponseEntity<?> sendEmail(@RequestBody Email gmail) {
         System.out.println("+++++++" + gmail.getTo());
-        boolean result = this.gmailService.sendEmail(gmail.getSubject(),
-                gmail.getMessage(), gmail.getTo());
+        boolean result = this.gmailService.sendEmail(gmail.getTo(),
+                gmail.getSubject(), gmail.getMessage());
         System.out.println("result: " + result);
         if (result) {
             return  ResponseEntity.ok("Email send successfully.");
