@@ -27,32 +27,33 @@ public class EmailController {
      * Gmail service
      */
     @Autowired
-    private EmailService gmailService;
+    private EmailService emailService;
 
-    @GetMapping("/gmails")
-    public ResponseEntity<List<Email>> getGmails() {
-        List<EmailEntity> gmailEntities = gmailService.getGmails();
+    @GetMapping("/email")
+    public ResponseEntity<List<Email>> getEmails() {
+        List<EmailEntity> gmailEntities = emailService.getGmails();
         if (gmailEntities != null && gmailEntities.size() > 0) {
-            List<Email> gmails = new ArrayList<>();
+            List<Email> emails = new ArrayList<>();
             for (EmailEntity gmailEntity : gmailEntities) {
-                gmails.add(ConvertUtils.convertGmailFromGmailEntity(gmailEntity));
+                emails.add(ConvertUtils.convertGmailFromGmailEntity(gmailEntity));
             }
-            return new ResponseEntity<List<Email>>(gmails, HttpStatus.OK);
+            return new ResponseEntity<List<Email>>(emails, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
     /**
+     * Gởi email
      *
-     * @param gmail
-     * @return
+     * @param email: thông tin email
+     * @return Thành công / thất bại
      */
     @PostMapping("/send_email")
-    public ResponseEntity<?> sendEmail(@RequestBody Email gmail) {
-        System.out.println("+++++++" + gmail.getTo());
-        boolean result = this.gmailService.sendEmail(gmail.getTo(),
-                gmail.getSubject(), gmail.getMessage());
+    public ResponseEntity<?> sendEmail(@RequestBody Email email) {
+        System.out.println("+++++++" + email.getTo());
+        boolean result = this.emailService.sendEmail(email.getTo(),
+                email.getSubject(), email.getMessage());
         System.out.println("result: " + result);
         if (result) {
             return  ResponseEntity.ok("Email send successfully.");
